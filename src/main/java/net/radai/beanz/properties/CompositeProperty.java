@@ -31,6 +31,9 @@ public abstract class CompositeProperty extends PropertyBase {
 
     public CompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
         super(containingBeanDescriptor, name, type);
+        if (delegates == null || delegates.length < 2) {
+            throw new IllegalArgumentException();
+        }
         for (Property delegate : delegates) {
             if (!delegate.getType().equals(getType())) {
                 throw new IllegalArgumentException();

@@ -34,6 +34,9 @@ public abstract class MethodProperty extends PropertyBase {
 
     public MethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
         super(containingBeanDescriptor, name, type);
+        if (getter == null && setter == null) {
+            throw new IllegalArgumentException();
+        }
         this.getter = getter;
         this.setter = setter;
     }

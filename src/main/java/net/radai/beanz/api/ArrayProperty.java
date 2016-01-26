@@ -35,7 +35,7 @@ public interface ArrayProperty extends Property {
 
     @Override
     default ArrayCodec getCodec() {
-        return (ArrayCodec) getContainingBean().getCodec(getValueType());
+        return (ArrayCodec) getContainingBeanDescriptor().getCodec(getValueType());
     }
 
     default Type getElementType() {

@@ -35,7 +35,7 @@ public interface CollectionProperty extends Property {
 
     @Override
     default CollectionCodec getCodec() {
-        return (CollectionCodec) getContainingBean().getCodec(getValueType());
+        return (CollectionCodec) getContainingBeanDescriptor().getCodec(getValueType());
     }
 
     default Type getElementType() {

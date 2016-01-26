@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.PropertyType;
 
 import java.lang.reflect.Method;
@@ -28,8 +28,8 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class SimpleMethodProperty extends MethodProperty {
-    public SimpleMethodProperty(Bean containingBean, String name, Type type, Method getter, Method setter) {
-        super(containingBean, name, type, getter, setter);
+    public SimpleMethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
+        super(containingBeanDescriptor, name, type, getter, setter);
     }
 
     @Override

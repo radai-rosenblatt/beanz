@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.CollectionProperty;
 
 import java.lang.reflect.Method;
@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class CollectionMethodProperty extends MethodProperty implements CollectionProperty{
-    public CollectionMethodProperty(Bean containingBean, String name, Type type, Method getter, Method setter) {
-        super(containingBean, name, type, getter, setter);
+    public CollectionMethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
+        super(containingBeanDescriptor, name, type, getter, setter);
     }
 }

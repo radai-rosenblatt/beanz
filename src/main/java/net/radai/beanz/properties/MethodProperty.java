@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,8 +32,8 @@ public abstract class MethodProperty extends PropertyBase {
     private final Method getter;
     private final Method setter;
 
-    public MethodProperty(Bean containingBean, String name, Type type, Method getter, Method setter) {
-        super(containingBean, name, type);
+    public MethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
+        super(containingBeanDescriptor, name, type);
         this.getter = getter;
         this.setter = setter;
     }

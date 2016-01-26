@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.Property;
 
 import java.lang.reflect.Type;
@@ -29,8 +29,8 @@ import java.lang.reflect.Type;
 public abstract class CompositeProperty extends PropertyBase {
     private final Property[] delegates;
 
-    public CompositeProperty(Bean containingBean, String name, Type type, Property[] delegates) {
-        super(containingBean, name, type);
+    public CompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+        super(containingBeanDescriptor, name, type);
         for (Property delegate : delegates) {
             if (!delegate.getType().equals(getType())) {
                 throw new IllegalArgumentException();

@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.PropertyType;
 
 import java.lang.reflect.Field;
@@ -28,8 +28,8 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class SimpleFieldProperty extends FieldProperty {
-    public SimpleFieldProperty(Bean containingBean, String name, Type type, Field field) {
-        super(containingBean, name, type, field);
+    public SimpleFieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+        super(containingBeanDescriptor, name, type, field);
     }
 
     @Override

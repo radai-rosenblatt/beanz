@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public interface Property {
-    Bean getContainingBean();
+    BeanDescriptor getContainingBeanDescriptor();
     String getName();
     PropertyType getType();
     Type getValueType();
@@ -33,6 +33,6 @@ public interface Property {
     Object get(Object bean);
     void set(Object bean, Object value);
     default Codec getCodec() {
-        return getContainingBean().getCodec(getValueType());
+        return getContainingBeanDescriptor().getCodec(getValueType());
     }
 }

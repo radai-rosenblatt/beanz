@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Field;
@@ -31,8 +31,8 @@ import java.lang.reflect.Type;
 public abstract class FieldProperty extends PropertyBase {
     private final Field field;
 
-    public FieldProperty(Bean containingBean, String name, Type type, Field field) {
-        super(containingBean, name, type);
+    public FieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+        super(containingBeanDescriptor, name, type);
         this.field = field;
     }
 

@@ -19,7 +19,7 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.ArrayProperty;
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.Property;
 
 import java.lang.reflect.Type;
@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class ArrayCompositeProperty extends CompositeProperty implements ArrayProperty{
-    public ArrayCompositeProperty(Bean containingBean, String name, Type type, Property[] delegates) {
-        super(containingBean, name, type, delegates);
+    public ArrayCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+        super(containingBeanDescriptor, name, type, delegates);
     }
 }

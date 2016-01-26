@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.MapProperty;
 import net.radai.beanz.api.Property;
 
@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class MapCompositeProperty extends CompositeProperty implements MapProperty{
-    public MapCompositeProperty(Bean containingBean, String name, Type type, Property[] delegates) {
-        super(containingBean, name, type, delegates);
+    public MapCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+        super(containingBeanDescriptor, name, type, delegates);
     }
 }

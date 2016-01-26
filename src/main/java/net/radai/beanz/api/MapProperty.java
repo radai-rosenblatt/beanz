@@ -35,7 +35,7 @@ public interface MapProperty extends Property {
 
     @Override
     default MapCodec getCodec() {
-        return (MapCodec) getContainingBean().getCodec(getValueType());
+        return (MapCodec) getContainingBeanDescriptor().getCodec(getValueType());
     }
 
     default Type getKeyType() {

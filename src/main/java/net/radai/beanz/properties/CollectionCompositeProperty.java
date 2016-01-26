@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.CollectionProperty;
 import net.radai.beanz.api.Property;
 
@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class CollectionCompositeProperty extends CompositeProperty implements CollectionProperty {
-    public CollectionCompositeProperty(Bean containingBean, String name, Type type, Property[] delegates) {
-        super(containingBean, name, type, delegates);
+    public CollectionCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+        super(containingBeanDescriptor, name, type, delegates);
     }
 }

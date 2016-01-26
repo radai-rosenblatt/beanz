@@ -29,7 +29,7 @@ import static net.radai.beanz.util.ReflectionUtil.erase;
 /**
  * Created by Radai Rosenblatt
  */
-public class Bean {
+public class BeanDescriptor {
     private Map<String, Property> properties = new HashMap<>();
     private Map<Type, Codec> codecs = new HashMap<>();
 

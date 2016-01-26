@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.Property;
 import net.radai.beanz.api.PropertyType;
 
@@ -28,8 +28,8 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class SimpleCompositeProperty extends CompositeProperty{
-    public SimpleCompositeProperty(Bean containingBean, String name, Type type, Property[] delegates) {
-        super(containingBean, name, type, delegates);
+    public SimpleCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+        super(containingBeanDescriptor, name, type, delegates);
     }
 
     @Override

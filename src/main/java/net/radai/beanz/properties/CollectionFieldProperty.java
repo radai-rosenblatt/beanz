@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.Bean;
+import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.CollectionProperty;
 
 import java.lang.reflect.Field;
@@ -28,7 +28,7 @@ import java.lang.reflect.Type;
  * Created by Radai Rosenblatt
  */
 public class CollectionFieldProperty extends FieldProperty implements CollectionProperty{
-    public CollectionFieldProperty(Bean containingBean, String name, Type type, Field field) {
-        super(containingBean, name, type, field);
+    public CollectionFieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+        super(containingBeanDescriptor, name, type, field);
     }
 }

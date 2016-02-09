@@ -91,7 +91,16 @@ public class CollectionCodec implements Codec {
         return sb.toString();
     }
 
+    public Type getElementType() {
+        return elementType;
+    }
+
     public Codec getElementCodec() {
         return elementCodec;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionUtil.prettyPrint(getType()) + " codec: via " + elementCodec;
     }
 }

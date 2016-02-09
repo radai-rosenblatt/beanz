@@ -137,6 +137,20 @@ public class ReflectionUtil {
         throw new UnsupportedOperationException();
     }
 
+    public static boolean isEnum(Type type) {
+        if (type instanceof ParameterizedType) {
+            return false; //no such thing as Enum<Something>
+        }
+        if (type instanceof Class<?>) {
+            Class clazz = (Class) type;
+            return clazz.isEnum();
+        }
+        if (type instanceof GenericArrayType) {
+            return false;
+        }
+        throw new UnsupportedOperationException();
+    }
+
     public static PropertyType typeOf(Type type) {
         if (isArray(type)) {
             return PropertyType.ARRAY;

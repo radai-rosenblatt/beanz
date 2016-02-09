@@ -100,4 +100,25 @@ public class MapCodec implements Codec {
         sb.append("}");
         return sb.toString();
     }
+
+    public Type getKeyType() {
+        return keyType;
+    }
+
+    public Type getValueType() {
+        return valueType;
+    }
+
+    public Codec getKeyCodec() {
+        return keyCodec;
+    }
+
+    public Codec getValueCodec() {
+        return valueCodec;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionUtil.prettyPrint(getType()) + " codec: via " + keyCodec + " and " + valueCodec;
+    }
 }

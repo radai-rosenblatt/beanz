@@ -48,10 +48,6 @@ public class ArrayCodec implements Codec {
         this.elementCodec = elementCodec;
     }
 
-    public Type getElementType() {
-        return elementType;
-    }
-
     @Override
     public Type getType() {
         return type;
@@ -98,12 +94,16 @@ public class ArrayCodec implements Codec {
         return sb.toString();
     }
 
+    public Type getElementType() {
+        return elementType;
+    }
+
     public Codec getElementCodec() {
         return elementCodec;
     }
 
     @Override
     public String toString() {
-        return prettyPrint(getType()) + " codec: array of " + elementCodec;
+        return prettyPrint(getType()) + " codec: via " + elementCodec;
     }
 }

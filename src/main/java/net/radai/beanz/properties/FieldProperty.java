@@ -86,7 +86,6 @@ public abstract class FieldProperty extends PropertyBase {
             accessModifier += " final";
             accessModifier = accessModifier.trim();
         }
-        return typeName + " " + getName() + ": "
-                + accessModifier + ReflectionUtil.prettyPrint(field.getGenericType()) + field.getName();
+        return typeName + " " + getName() + ": " + accessModifier + " " + ReflectionUtil.prettyPrint(field.getGenericType()) + " " + field.getName();
     }
 }

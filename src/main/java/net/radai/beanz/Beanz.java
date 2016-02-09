@@ -27,19 +27,42 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Radai Rosenblatt
  */
 public class Beanz {
+    public static final Set<String> DEFAULT_IGNORE = Collections.unmodifiableSet(new HashSet<>(Collections.singletonList("class")));
+
+    public static Pod wrap (Object obj) {
+        BeanDescriptor descriptor = parse(obj.getClass());
+        return new Pod(descriptor, obj);
+    }
+
+    public static Pod wrap (Class clazz) {
+        try {
+            return wrap(clazz.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new IllegalArgumentException("unable to instantiate class " + clazz, e);
+        }
+    }
 
     public static BeanDescriptor parse(Object instance) {
         return parse(instance.getClass());
     }
 
     public static BeanDescriptor parse(Class clazz) {
+        return parse(clazz, DEFAULT_IGNORE);
+    }
+
+    public static BeanDescriptor parse(Class clazz, Set<String> ignore) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("got null class");
+        }
+        if (ignore == null) {
+            ignore = Collections.emptySet();
+        }
         BeanDescriptor bean = new BeanDescriptor();
 
         Map<String, Property> properties = new HashMap<>();
@@ -49,7 +72,7 @@ public class Beanz {
         for (Method method : clazz.getMethods()) {
             if (ReflectionUtil.isGetter(method) || ReflectionUtil.isSetter(method)) {
                 String propName = ReflectionUtil.propNameFrom(method);
-                if (!properties.containsKey(propName)) {
+                if (!properties.containsKey(propName) && !ignore.contains(propName)) {
                     try {
                         properties.put(propName, resolve(bean, clazz, propName, codecs));
                     } catch (AmbiguousPropertyException e) {
@@ -68,7 +91,7 @@ public class Beanz {
                     continue;
                 }
                 String fieldName = f.getName();
-                if (properties.containsKey(fieldName)) {
+                if (properties.containsKey(fieldName) || ignore.contains(fieldName)) {
                     continue;
                 }
                 try {
@@ -218,8 +241,17 @@ public class Beanz {
                 return null;
             }
             result = new MapCodec(type, keyType, valueType, keyCodec, valueCodec);
+        } else if (ReflectionUtil.isEnum(type)) {
+            Class erased = ReflectionUtil.erase(type);
+            try {
+                Method encodeMethod = erased.getMethod("name");
+                Method decodeMethod = erased.getMethod("valueOf", String.class);
+                result = new SimpleCodec(type, encodeMethod, decodeMethod);
+            } catch (NoSuchMethodException e) {
+                throw new IllegalStateException("while preparing codec for enum " + type, e);
+            }
         } else {
-            //see if this type has toString + valueOf(String)
+            //see if this type has toString + valueOf(String) defined DIRECTLY on the type itself
             Class erased = ReflectionUtil.erase(type);
             Method encodeMethod = null;
             Method decodeMethod = null;

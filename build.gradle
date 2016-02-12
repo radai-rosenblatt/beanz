@@ -17,8 +17,13 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'maven'
+
+group = "net.radai.beanz"
+version = "0.1-SNAPSHOT"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -29,6 +34,10 @@ compileJava {
 
 test {
     useTestNG()
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
 }
 
 dependencies {

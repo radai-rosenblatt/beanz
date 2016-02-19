@@ -100,7 +100,7 @@ public class ArrayCodec implements Codec {
         int i=0;
         for (String strValue : strCollection) {
             Object value = elementCodec.decode(strValue);
-            Array.set(result, i++, value); //TODO - verify this is primitive-safe
+            Array.set(result, i++, value); //this is primitive-safe
         }
         return result;
     }

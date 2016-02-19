@@ -35,12 +35,12 @@ import java.util.*;
 public class Beanz {
     public static final Set<String> DEFAULT_IGNORE = Collections.unmodifiableSet(new HashSet<>(Collections.singletonList("class")));
 
-    public static Pod wrap (Object obj) {
+    public static <T> Pod<T> wrap(T obj) {
         BeanDescriptor descriptor = parse(obj.getClass());
-        return new Pod(descriptor, obj);
+        return new Pod<>(descriptor, obj);
     }
 
-    public static Pod wrap (Class<?> clazz) {
+    public static <T> Pod<T> wrap(Class<T> clazz) {
         try {
             return wrap(clazz.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {

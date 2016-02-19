@@ -21,11 +21,11 @@ package net.radai.beanz.api;
 /**
  * Created by Radai Rosenblatt
  */
-public class Pod {
+public class Pod<T> {
     private final BeanDescriptor descriptor;
-    private final Object bean;
+    private final T bean;
 
-    public Pod(BeanDescriptor descriptor, Object bean) {
+    public Pod(BeanDescriptor descriptor, T bean) {
         this.descriptor = descriptor;
         this.bean = bean;
     }
@@ -49,7 +49,7 @@ public class Pod {
         prop.set(bean, value);
     }
 
-    public Object getBean() {
+    public T getBean() {
         return bean;
     }
 }

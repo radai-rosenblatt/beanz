@@ -58,7 +58,7 @@ public class CollectionCodec implements Codec {
             return null;
         }
         if (!(encoded.startsWith("[") && encoded.endsWith("]"))) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("unable to parse a collection out of " + encoded);
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
         //noinspection unchecked

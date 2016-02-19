@@ -68,7 +68,8 @@ public class MapCodec implements Codec {
             throw new IllegalArgumentException();
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
-        Map map = ReflectionUtil.instantiateMap(erase(type));
+        //noinspection unchecked
+        Map<Object, Object> map = (Map<Object, Object>) ReflectionUtil.instantiateMap(erase(type));
         for (String element : elements) {
             String[] kvPair = element.split("\\s*=\\s*");
             Object key = keyCodec.decode(kvPair[0]);
@@ -99,6 +100,19 @@ public class MapCodec implements Codec {
         sb.delete(sb.length()-2, sb.length()); //last ", "
         sb.append("}");
         return sb.toString();
+    }
+
+    public Map<?, ?> decodeMap(Map<String, String> strMap) {
+        //noinspection unchecked
+        Map<Object, Object> result = (Map<Object, Object>) ReflectionUtil.instantiateMap(erase(getType()));
+        for (Map.Entry<String, String> pair : strMap.entrySet()) {
+            String keyStr = pair.getKey();
+            String valueStr = pair.getValue();
+            Object key = keyCodec.decode(keyStr);
+            Object value = valueCodec.decode(valueStr);
+            result.put(key, value);
+        }
+        return result;
     }
 
     public Type getKeyType() {

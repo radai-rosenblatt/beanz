@@ -100,7 +100,7 @@ public class Codecs {
         BUILT_INS.put(double.class, BUILT_INS.get(Double.class));
     }
 
-    private static SimpleCodec codecFor(Class clazz) {
+    private static SimpleCodec codecFor(Class<?> clazz) {
         try {
             //noinspection unchecked
             return new SimpleCodec(clazz, clazz.getMethod("toString"), clazz.getMethod("valueOf", String.class));

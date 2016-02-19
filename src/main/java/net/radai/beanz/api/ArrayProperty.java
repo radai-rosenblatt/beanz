@@ -21,7 +21,9 @@ package net.radai.beanz.api;
 import net.radai.beanz.codecs.ArrayCodec;
 import net.radai.beanz.util.ReflectionUtil;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 /**
  * Created by Radai Rosenblatt
@@ -40,5 +42,24 @@ public interface ArrayProperty extends Property {
 
     default Type getElementType() {
         return ReflectionUtil.getElementType(getValueType());
+    }
+
+    default void setArray(Object bean, Collection<?> values) {
+        Type elementType = getElementType();
+        Object array = ReflectionUtil.instatiateArray(elementType, values.size());
+        int i=0;
+        for (Object value : values) {
+            Array.set(array, i++, value);
+        }
+        set(bean, array);
+    }
+
+    default void setFromStrings(Object bean, Collection<String> strValues) {
+        ArrayCodec codec = getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
+        }
+        Object decoded = codec.decodeArray(strValues);
+        set(bean, decoded);
     }
 }

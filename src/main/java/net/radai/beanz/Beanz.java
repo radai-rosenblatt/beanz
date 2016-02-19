@@ -40,7 +40,7 @@ public class Beanz {
         return new Pod(descriptor, obj);
     }
 
-    public static Pod wrap (Class clazz) {
+    public static Pod wrap (Class<?> clazz) {
         try {
             return wrap(clazz.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
@@ -52,11 +52,11 @@ public class Beanz {
         return parse(instance.getClass());
     }
 
-    public static BeanDescriptor parse(Class clazz) {
+    public static BeanDescriptor parse(Class<?> clazz) {
         return parse(clazz, DEFAULT_IGNORE);
     }
 
-    public static BeanDescriptor parse(Class clazz, Set<String> ignore) {
+    public static BeanDescriptor parse(Class<?> clazz, Set<String> ignore) {
         if (clazz == null) {
             throw new IllegalArgumentException("got null class");
         }
@@ -83,7 +83,7 @@ public class Beanz {
         }
 
         //fields later
-        Class c = clazz;
+        Class<?> c = clazz;
         while (c != null) {
             for (Field f : c.getDeclaredFields()) {
                 int modifiers = f.getModifiers();
@@ -108,7 +108,7 @@ public class Beanz {
         return bean;
     }
 
-    private static Property resolve(BeanDescriptor bean, Class clazz, String propName, Map<Type, Codec> codecs) {
+    private static Property resolve(BeanDescriptor bean, Class<?> clazz, String propName, Map<Type, Codec> codecs) {
         //look for a getter/setter pair
         Method getter = ReflectionUtil.findGetter(clazz, propName);
         Method setter = ReflectionUtil.findSetter(clazz, propName);
@@ -183,7 +183,7 @@ public class Beanz {
         }
     }
 
-    private static Type resolvePropertyType(Class clazz, String propName, Method getter, Method setter, Field field) {
+    private static Type resolvePropertyType(Class<?> clazz, String propName, Method getter, Method setter, Field field) {
         Type getterType = getter != null ? getter.getGenericReturnType() : null;
         Type setterType = setter != null ? setter.getGenericParameterTypes()[0] : null;
         Type fieldType = field != null ? field.getGenericType() : null;
@@ -212,7 +212,7 @@ public class Beanz {
     }
 
     private static Codec resolvePropertyCodec (
-            Class clazz, String propName, Type type,
+            Class<?> clazz, String propName, Type type,
             Method getter, Method setter, Field field,
             Map<Type, Codec> codecs) {
         //TODO - check for overrides in annotations on methods > field > class > type
@@ -242,7 +242,7 @@ public class Beanz {
             }
             result = new MapCodec(type, keyType, valueType, keyCodec, valueCodec);
         } else if (ReflectionUtil.isEnum(type)) {
-            Class erased = ReflectionUtil.erase(type);
+            Class<?> erased = ReflectionUtil.erase(type);
             try {
                 Method encodeMethod = erased.getMethod("name");
                 Method decodeMethod = erased.getMethod("valueOf", String.class);
@@ -252,7 +252,7 @@ public class Beanz {
             }
         } else {
             //see if this type has toString + valueOf(String) defined DIRECTLY on the type itself
-            Class erased = ReflectionUtil.erase(type);
+            Class<?> erased = ReflectionUtil.erase(type);
             Method encodeMethod = null;
             Method decodeMethod = null;
             for (Method method : erased.getMethods()) {

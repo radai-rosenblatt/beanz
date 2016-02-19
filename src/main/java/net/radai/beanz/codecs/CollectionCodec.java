@@ -61,7 +61,8 @@ public class CollectionCodec implements Codec {
             throw new IllegalArgumentException();
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
-        Collection collection = ReflectionUtil.instantiateCollection(ReflectionUtil.erase(type));
+        //noinspection unchecked
+        Collection<Object> collection = (Collection<Object>) ReflectionUtil.instantiateCollection(ReflectionUtil.erase(type));
         for (String element : elements) {
             //noinspection unchecked
             collection.add(elementCodec.decode(element));
@@ -77,7 +78,7 @@ public class CollectionCodec implements Codec {
         if (!ReflectionUtil.isCollection(object.getClass())) {
             throw new IllegalArgumentException();
         }
-        Collection collection = (Collection) object;
+        Collection<?> collection = (Collection<?>) object;
         if (collection.isEmpty()) {
             return "[]";
         }
@@ -89,6 +90,16 @@ public class CollectionCodec implements Codec {
         sb.delete(sb.length()-2, sb.length()); //last ", "
         sb.append("]");
         return sb.toString();
+    }
+
+    public Collection<?> decodeCollection(Collection<String> strCollection) {
+        //noinspection unchecked
+        Collection<Object> result = (Collection<Object>) ReflectionUtil.instantiateCollection(erase(getType()));
+        for (String strValue : strCollection) {
+            Object value = elementCodec.decode(strValue);
+            result.add(value);
+        }
+        return result;
     }
 
     public Type getElementType() {

@@ -22,6 +22,8 @@ package net.radai.beanz.api;
  * Created by Radai Rosenblatt
  */
 public class AmbiguousPropertyException extends IllegalArgumentException {
+    private static final long serialVersionUID = 1L;
+
     public AmbiguousPropertyException() {
     }
 

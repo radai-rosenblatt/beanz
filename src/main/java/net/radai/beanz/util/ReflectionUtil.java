@@ -28,7 +28,7 @@ import java.util.*;
  * Created by Radai Rosenblatt
  */
 public class ReflectionUtil {
-    public static Class erase(Type type) {
+    public static Class<?> erase(Type type) {
         if (type instanceof GenericArrayType) {
             return Object.class; //TODO - get more info?
         }
@@ -46,7 +46,7 @@ public class ReflectionUtil {
     }
 
     public static Object instantiate(Type type) {
-        Class erased = erase(type);
+        Class<?> erased = erase(type);
         if (Collection.class.isAssignableFrom(erased)) {
             return instantiateCollection(erased);
         }
@@ -57,7 +57,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static Collection instantiateCollection (Class collectionClass) {
+    public static Collection<?> instantiateCollection (Class<?> collectionClass) {
         if (!Collection.class.isAssignableFrom(collectionClass)) {
             throw new IllegalArgumentException();
         }
@@ -78,7 +78,12 @@ public class ReflectionUtil {
         throw new UnsupportedOperationException();
     }
 
-    public static Map<?, ?> instantiateMap(Class mapClass) {
+    public static Object instatiateArray(Type elementType, int size) {
+        Class<?> elementClass = erase(elementType);
+        return Array.newInstance(elementClass, size);
+    }
+
+    public static Map<?, ?> instantiateMap(Class<?> mapClass) {
         if (!Map.class.isAssignableFrom(mapClass)) {
             throw new IllegalArgumentException();
         }
@@ -98,7 +103,7 @@ public class ReflectionUtil {
             return false;
         }
         if (type instanceof Class<?>) {
-            Class clazz = (Class) type;
+            Class<?> clazz = (Class<?>) type;
             return clazz.isArray();
         }
         if (type instanceof GenericArrayType) {
@@ -113,7 +118,7 @@ public class ReflectionUtil {
             return Collection.class.isAssignableFrom((Class<?>) parameterizedType.getRawType());
         }
         if (type instanceof Class<?>) {
-            Class clazz = (Class) type;
+            Class<?> clazz = (Class<?>) type;
             return Collection.class.isAssignableFrom(clazz);
         }
         if (type instanceof GenericArrayType) {
@@ -128,7 +133,7 @@ public class ReflectionUtil {
             return Map.class.isAssignableFrom((Class<?>) parameterizedType.getRawType());
         }
         if (type instanceof Class<?>) {
-            Class clazz = (Class) type;
+            Class<?> clazz = (Class<?>) type;
             return Map.class.isAssignableFrom(clazz);
         }
         if (type instanceof GenericArrayType) {
@@ -142,7 +147,7 @@ public class ReflectionUtil {
             return false; //no such thing as Enum<Something>
         }
         if (type instanceof Class<?>) {
-            Class clazz = (Class) type;
+            Class<?> clazz = (Class<?>) type;
             return clazz.isEnum();
         }
         if (type instanceof GenericArrayType) {
@@ -167,7 +172,7 @@ public class ReflectionUtil {
     public static Type getElementType(Type type) {
         if (isArray(type)) {
             if (type instanceof Class<?>) {
-                Class clazz = (Class) type;
+                Class<?> clazz = (Class<?>) type;
                 return clazz.getComponentType();
             }
             if (type instanceof GenericArrayType) {
@@ -317,7 +322,7 @@ public class ReflectionUtil {
         throw new IllegalArgumentException("method name " + methodName + " does not contain a property name");
     }
 
-    public static Method findSetter(Class clazz, String propName) {
+    public static Method findSetter(Class<?> clazz, String propName) {
         String expectedName = "set" + propName.substring(0, 1).toUpperCase(Locale.ROOT) + propName.substring(1);
         for (Method method : clazz.getMethods()) {
             if (!method.getName().equals(expectedName)) {
@@ -335,7 +340,7 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static Method findGetter(Class clazz, String propName) {
+    public static Method findGetter(Class<?> clazz, String propName) {
         Set<String> expectedNames = new HashSet<>(Arrays.asList(
                 "get" + propName.substring(0, 1).toUpperCase(Locale.ROOT) + propName.substring(1),
                 "is" + propName.substring(0, 1).toUpperCase(Locale.ROOT) + propName.substring(1) //bool props
@@ -360,8 +365,8 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static Field findField(Class clazz, String propName) {
-        Class c = clazz;
+    public static Field findField(Class<?> clazz, String propName) {
+        Class<?> c = clazz;
         while (c != null) {
             for (Field f : c.getDeclaredFields()) {
                 if (!f.getName().equals(propName)) {
@@ -388,7 +393,7 @@ public class ReflectionUtil {
             return wildcardType.toString();
         }
         if (type instanceof TypeVariable) {
-            TypeVariable typeVariable = (TypeVariable) type;
+            TypeVariable<?> typeVariable = (TypeVariable) type;
             return typeVariable.getName();
         }
         if (type instanceof ParameterizedType) {
@@ -406,7 +411,7 @@ public class ReflectionUtil {
             }
             return sb.toString();
         }
-        Class clazz = (Class) type;
+        Class<?> clazz = (Class<?>) type;
         if (clazz.isArray()) {
             return prettyPrint(clazz.getComponentType()) + "[]";
         }

@@ -32,6 +32,14 @@ public interface Property {
     boolean isWritable();
     Object get(Object bean);
     void set(Object bean, Object value);
+    default void setFromString(Object bean, String strValue) {
+        Codec codec = getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
+        }
+        Object value = codec.decode(strValue);
+        set(bean, value);
+    }
     default Codec getCodec() {
         return getContainingBeanDescriptor().getCodec(getValueType());
     }

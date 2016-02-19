@@ -29,4 +29,27 @@ public class Pod {
         this.descriptor = descriptor;
         this.bean = bean;
     }
+
+    public Property resolve(String propName) {
+        return descriptor.getProperty(propName);
+    }
+
+    public void set(Property prop, String value) {
+        Codec codec = prop.getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
+        }
+        set(prop, codec.decode(value));
+    }
+
+    public void set(Property prop, Object value) {
+        if (resolve(prop.getName()) != prop) {
+            throw new IllegalArgumentException();
+        }
+        prop.set(bean, value);
+    }
+
+    public Object getBean() {
+        return bean;
+    }
 }

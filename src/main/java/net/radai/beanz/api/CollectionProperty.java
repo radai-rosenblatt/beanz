@@ -22,6 +22,7 @@ import net.radai.beanz.codecs.CollectionCodec;
 import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 /**
  * Created by Radai Rosenblatt
@@ -40,5 +41,22 @@ public interface CollectionProperty extends Property {
 
     default Type getElementType() {
         return ReflectionUtil.getElementType(getValueType());
+    }
+
+    default void setCollection(Object bean, Collection<?> values) {
+        Class<?> collectionClass = ReflectionUtil.erase(getValueType());
+        //noinspection unchecked
+        Collection<Object> collection = (Collection<Object>) ReflectionUtil.instantiateCollection(collectionClass);
+        collection.addAll(values);
+        set(bean, collection);
+    }
+
+    default void setFromStrings(Object bean, Collection<String> strValues) {
+        CollectionCodec codec = getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
+        }
+        Collection<?> decoded = codec.decodeCollection(strValues);
+        set(bean, decoded);
     }
 }

@@ -22,6 +22,8 @@ import net.radai.beanz.codecs.MapCodec;
 import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by Radai Rosenblatt
@@ -44,5 +46,14 @@ public interface MapProperty extends Property {
 
     default Type getElementType() { //getValueType is taken
         return ReflectionUtil.getElementType(getValueType());
+    }
+
+    default void setFromStrings(Object bean, Map<String, String> strValues) {
+        MapCodec codec = getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
+        }
+        Map<?, ?> decoded = codec.decodeMap(strValues);
+        set(bean, decoded);
     }
 }

@@ -25,6 +25,7 @@ import org.apache.commons.lang3.text.StrBuilder;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import static net.radai.beanz.util.ReflectionUtil.erase;
 import static net.radai.beanz.util.ReflectionUtil.prettyPrint;
@@ -62,7 +63,7 @@ public class ArrayCodec implements Codec {
             throw new IllegalArgumentException();
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
-        Class erased = erase(getElementType());
+        Class<?> erased = erase(getElementType());
         Object array = Array.newInstance(erased, elements.length);
         for (int i=0; i<elements.length; i++) {
             Array.set(array, i, elementCodec.decode(elements[i]));
@@ -92,6 +93,16 @@ public class ArrayCodec implements Codec {
         sb.delete(sb.length()-2, sb.length()); //last ", "
         sb.append("]");
         return sb.toString();
+    }
+
+    public Object decodeArray(Collection<String> strCollection) {
+        Object result = ReflectionUtil.instatiateArray(getElementType(), strCollection.size());
+        int i=0;
+        for (String strValue : strCollection) {
+            Object value = elementCodec.decode(strValue);
+            Array.set(result, i++, value); //TODO - verify this is primitive-safe
+        }
+        return result;
     }
 
     public Type getElementType() {

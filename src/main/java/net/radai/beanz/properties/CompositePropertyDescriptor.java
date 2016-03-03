@@ -19,22 +19,22 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.Property;
+import net.radai.beanz.api.PropertyDescriptor;
 
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public abstract class CompositeProperty extends PropertyBase {
-    private final Property[] delegates;
+public abstract class CompositePropertyDescriptor extends PropertyDescriptorBase {
+    private final PropertyDescriptor[] delegates;
 
-    public CompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+    public CompositePropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, PropertyDescriptor[] delegates) {
         super(containingBeanDescriptor, name, type);
         if (delegates == null || delegates.length < 2) {
             throw new IllegalArgumentException();
         }
-        for (Property delegate : delegates) {
+        for (PropertyDescriptor delegate : delegates) {
             if (!delegate.getType().equals(getType())) {
                 throw new IllegalArgumentException();
             }
@@ -44,7 +44,7 @@ public abstract class CompositeProperty extends PropertyBase {
 
     @Override
     public boolean isReadable() {
-        for (Property delegate : delegates) {
+        for (PropertyDescriptor delegate : delegates) {
             if (delegate.isReadable()) {
                 return true;
             }
@@ -54,7 +54,7 @@ public abstract class CompositeProperty extends PropertyBase {
 
     @Override
     public boolean isWritable() {
-        for (Property delegate : delegates) {
+        for (PropertyDescriptor delegate : delegates) {
             if (delegate.isWritable()) {
                 return true;
             }
@@ -64,7 +64,7 @@ public abstract class CompositeProperty extends PropertyBase {
 
     @Override
     public Object get(Object bean) {
-        for (Property delegate : delegates) {
+        for (PropertyDescriptor delegate : delegates) {
             if (delegate.isReadable()) {
                 return delegate.get(bean);
             }
@@ -74,7 +74,7 @@ public abstract class CompositeProperty extends PropertyBase {
 
     @Override
     public void set(Object bean, Object value) {
-        for (Property delegate : delegates) {
+        for (PropertyDescriptor delegate : delegates) {
             if (delegate.isWritable()) {
                 delegate.set(bean, value);
                 return;

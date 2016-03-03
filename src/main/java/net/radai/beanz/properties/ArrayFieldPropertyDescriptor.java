@@ -18,7 +18,7 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.ArrayProperty;
+import net.radai.beanz.api.ArrayPropertyDescriptor;
 import net.radai.beanz.api.BeanDescriptor;
 
 import java.lang.reflect.Field;
@@ -27,8 +27,8 @@ import java.lang.reflect.Type;
 /**
  * Created by Radai Rosenblatt
  */
-public class ArrayFieldProperty extends FieldProperty implements ArrayProperty{
-    public ArrayFieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+public class ArrayFieldPropertyDescriptor extends FieldPropertyDescriptor implements ArrayPropertyDescriptor {
+    public ArrayFieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
         super(containingBeanDescriptor, name, type, field);
     }
 }

@@ -18,8 +18,8 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.ArrayProperty;
 import net.radai.beanz.api.BeanDescriptor;
+import net.radai.beanz.api.CollectionPropertyDescriptor;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -27,8 +27,8 @@ import java.lang.reflect.Type;
 /**
  * Created by Radai Rosenblatt
  */
-public class ArrayMethodProperty extends MethodProperty implements ArrayProperty{
-    public ArrayMethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
+public class CollectionMethodPropertyDescriptor extends MethodPropertyDescriptor implements CollectionPropertyDescriptor {
+    public CollectionMethodPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
         super(containingBeanDescriptor, name, type, getter, setter);
     }
 }

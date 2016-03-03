@@ -23,24 +23,64 @@ import java.lang.reflect.Type;
 /**
  * Created by Radai Rosenblatt
  */
-public interface Property {
-    BeanDescriptor getContainingBeanDescriptor();
-    String getName();
-    PropertyType getType();
-    Type getValueType();
-    boolean isReadable();
-    boolean isWritable();
-    Object get(Object bean);
-    void set(Object bean, Object value);
-    default void setFromString(Object bean, String strValue) {
-        Codec codec = getCodec();
-        if (codec == null) {
-            throw new IllegalStateException();
+public class Property {
+    protected final PropertyDescriptor descriptor;
+    protected final Bean containingBean;
+
+    public Property(PropertyDescriptor descriptor, Bean containingBean) {
+        if (descriptor == null || containingBean == null
+                || containingBean.getDescriptor().getProperty(descriptor.getName()) != descriptor) {
+            throw new IllegalArgumentException();
         }
-        Object value = codec.decode(strValue);
-        set(bean, value);
+        this.descriptor = descriptor;
+        this.containingBean = containingBean;
     }
-    default Codec getCodec() {
-        return getContainingBeanDescriptor().getCodec(getValueType());
+
+    public PropertyDescriptor getDescriptor() {
+        return descriptor;
+    }
+
+    public Bean getContainingBean() {
+        return containingBean;
+    }
+
+    public String getName() {
+        return descriptor.getName();
+    }
+
+    public PropertyType getType() {
+        return descriptor.getType();
+    }
+
+    public Type getValueType() {
+        return descriptor.getValueType();
+    }
+
+    public boolean isReadable() {
+        return descriptor.isReadable();
+    }
+
+    public boolean isWritable() {
+        return descriptor.isWritable();
+    }
+
+    public Codec getCodec() {
+        return descriptor.getCodec();
+    }
+
+    public void setFromString(String value) {
+        descriptor.setFromString(containingBean.getBean(), value);
+    }
+
+    public void set(Object value) {
+        descriptor.set(containingBean.getBean(), value);
+    }
+
+    public Object get() {
+        return descriptor.get(containingBean.getBean());
+    }
+
+    public String getAsString() {
+        return descriptor.getAsString(containingBean.getBean());
     }
 }

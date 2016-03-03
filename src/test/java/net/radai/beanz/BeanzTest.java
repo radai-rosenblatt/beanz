@@ -18,7 +18,7 @@
 
 package net.radai.beanz;
 
-import net.radai.beanz.api.Pod;
+import net.radai.beanz.api.Bean;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class BeanzTest {
 
     @Test
     public void testSimpleBeanWrapping() {
-        Bean1 bean = new Bean1();
-        Pod pod = Beanz.wrap(bean);
+        BeanClass instance = new BeanClass();
+        Bean bean = Beanz.wrap(instance);
         int g = 7;
     }
 
@@ -41,7 +41,7 @@ public class BeanzTest {
         V1, V2;
     }
 
-    public static class Bean1 {
+    public static class BeanClass {
         private String f1;
         private double f2;
         private Integer f3;

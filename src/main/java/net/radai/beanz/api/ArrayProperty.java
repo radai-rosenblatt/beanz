@@ -19,47 +19,47 @@
 package net.radai.beanz.api;
 
 import net.radai.beanz.codecs.ArrayCodec;
-import net.radai.beanz.util.ReflectionUtil;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Radai Rosenblatt
  */
-public interface ArrayProperty extends Property {
+public class ArrayProperty extends Property {
 
-    @Override
-    default PropertyType getType() {
-        return PropertyType.ARRAY;
+    public ArrayProperty(ArrayPropertyDescriptor descriptor, Bean containingBean) {
+        super(descriptor, containingBean);
     }
 
     @Override
-    default ArrayCodec getCodec() {
-        return (ArrayCodec) getContainingBeanDescriptor().getCodec(getValueType());
+    public ArrayPropertyDescriptor getDescriptor() {
+        return (ArrayPropertyDescriptor) super.getDescriptor();
     }
 
-    default Type getElementType() {
-        return ReflectionUtil.getElementType(getValueType());
+    public Type getElementType() {
+        return getDescriptor().getElementType();
     }
 
-    default void setArray(Object bean, Collection<?> values) {
-        Type elementType = getElementType();
-        Object array = ReflectionUtil.instatiateArray(elementType, values.size());
-        int i=0;
-        for (Object value : values) {
-            Array.set(array, i++, value);
-        }
-        set(bean, array);
+    @Override
+    public ArrayCodec getCodec() {
+        return (ArrayCodec) super.getCodec();
     }
 
-    default void setFromStrings(Object bean, Collection<String> strValues) {
-        ArrayCodec codec = getCodec();
-        if (codec == null) {
-            throw new IllegalStateException();
-        }
-        Object decoded = codec.decodeArray(strValues);
-        set(bean, decoded);
+    public void setArray(Collection<?> values) {
+        getDescriptor().setArray(containingBean.getBean(), values);
+    }
+
+    public void setFromStrings(Collection<String> strValues) {
+        getDescriptor().setFromStrings(containingBean.getBean(), strValues);
+    }
+
+    public List<?> getAsList() {
+        return getDescriptor().getAsList(containingBean.getBean());
+    }
+
+    public List<String> getAsStrings() {
+        return getDescriptor().getAsStrings(containingBean.getBean());
     }
 }

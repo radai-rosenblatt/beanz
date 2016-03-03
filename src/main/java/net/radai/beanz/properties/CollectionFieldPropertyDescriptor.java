@@ -19,7 +19,7 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.PropertyType;
+import net.radai.beanz.api.CollectionPropertyDescriptor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -27,13 +27,8 @@ import java.lang.reflect.Type;
 /**
  * Created by Radai Rosenblatt
  */
-public class SimpleFieldProperty extends FieldProperty {
-    public SimpleFieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+public class CollectionFieldPropertyDescriptor extends FieldPropertyDescriptor implements CollectionPropertyDescriptor {
+    public CollectionFieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
         super(containingBeanDescriptor, name, type, field);
-    }
-
-    @Override
-    public PropertyType getType() {
-        return PropertyType.SIMPLE;
     }
 }

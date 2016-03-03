@@ -19,16 +19,16 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.CollectionProperty;
-import net.radai.beanz.api.Property;
+import net.radai.beanz.api.MapPropertyDescriptor;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public class CollectionCompositeProperty extends CompositeProperty implements CollectionProperty {
-    public CollectionCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
-        super(containingBeanDescriptor, name, type, delegates);
+public class MapFieldPropertyDescriptor extends FieldPropertyDescriptor implements MapPropertyDescriptor {
+    public MapFieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+        super(containingBeanDescriptor, name, type, field);
     }
 }

@@ -21,37 +21,45 @@ package net.radai.beanz.properties;
 import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.util.ReflectionUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public abstract class FieldProperty extends PropertyBase {
-    private final Field field;
+public abstract class MethodPropertyDescriptor extends PropertyDescriptorBase {
+    private final Method getter;
+    private final Method setter;
 
-    public FieldProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+    public MethodPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
         super(containingBeanDescriptor, name, type);
-        this.field = field;
+        if (getter == null && setter == null) {
+            throw new IllegalArgumentException();
+        }
+        this.getter = getter;
+        this.setter = setter;
     }
 
     @Override
     public boolean isReadable() {
-        return true;
+        return getter != null;
     }
 
     @Override
     public boolean isWritable() {
-        return ReflectionUtil.isFinal(field);
+        return setter != null;
     }
 
     @Override
     public Object get(Object bean) {
+        if (!isReadable()) {
+            throw new IllegalStateException();
+        }
         try {
-            return field.get(bean);
-        } catch (IllegalAccessException e) {
-            //todo - support using private fields
+            return getter.invoke(bean);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            //todo - support using private methods
             throw new IllegalStateException(e);
         }
     }
@@ -62,30 +70,28 @@ public abstract class FieldProperty extends PropertyBase {
             throw new IllegalStateException();
         }
         try {
-            field.set(bean, value);
-        }  catch (IllegalAccessException e) {
-            //todo - support using private fields
+            setter.invoke(bean, value);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            //todo - support using private methods
             throw new IllegalStateException(e);
         }
     }
 
     @Override
     public String toString() {
-        //todo - move most of this to ReflectionUtil.prettyPrint(field)
         String typeName = ReflectionUtil.prettyPrint(getValueType());
-        int modifiers = field.getModifiers();
-        String accessModifier = "";
-        if (Modifier.isPrivate(modifiers)) {
-            accessModifier = "private";
-        } else if (Modifier.isProtected(modifiers)) {
-            accessModifier = "protected";
-        } else if (Modifier.isPublic(modifiers)) {
-            accessModifier = "public";
+        String result = typeName + " " + getName() + ": ";
+        if (getter != null) {
+            result += getter.getName() + "()";
+        } else {
+            result += "-";
         }
-        if (Modifier.isFinal(modifiers)) {
-            accessModifier += " final";
-            accessModifier = accessModifier.trim();
+        result += " / ";
+        if (setter != null) {
+            result += setter.getName() + "(" + getName() + ")";
+        } else {
+            result += "-";
         }
-        return typeName + " " + getName() + ": " + accessModifier + " " + ReflectionUtil.prettyPrint(field.getGenericType()) + " " + field.getName();
+        return result;
     }
 }

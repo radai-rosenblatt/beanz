@@ -35,12 +35,26 @@ import java.util.*;
 public class Beanz {
     public static final Set<String> DEFAULT_IGNORE = Collections.unmodifiableSet(new HashSet<>(Collections.singletonList("class")));
 
-    public static <T> Pod<T> wrap(T obj) {
-        BeanDescriptor descriptor = parse(obj.getClass());
-        return new Pod<>(descriptor, obj);
+    /**
+     * wraps around an existing bean instance
+     * @param instance existing bean instance
+     * @return a Bean wrapper around the given instance
+     */
+    public static <T> Bean<T> wrap(T instance) {
+        if (instance == null || instance instanceof Class) {
+            throw new IllegalArgumentException();
+        }
+        BeanDescriptor descriptor = parse(instance.getClass());
+        return new Bean<>(descriptor, instance);
     }
 
-    public static <T> Pod<T> wrap(Class<T> clazz) {
+    /**
+     * creates a new Bean wrapper around a newly-created instance of
+     * the given class
+     * @param clazz class to create and wrap an instance of
+     * @return a bean wrapper around an instance of the given class
+     */
+    public static <T> Bean<T> create(Class<T> clazz) {
         try {
             return wrap(clazz.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {
@@ -65,7 +79,7 @@ public class Beanz {
         }
         BeanDescriptor bean = new BeanDescriptor();
 
-        Map<String, Property> properties = new HashMap<>();
+        Map<String, PropertyDescriptor> properties = new HashMap<>();
         Map<Type, Codec> codecs = new HashMap<>(Codecs.BUILT_INS);
 
         //methods 1st
@@ -108,7 +122,7 @@ public class Beanz {
         return bean;
     }
 
-    private static Property resolve(BeanDescriptor bean, Class<?> clazz, String propName, Map<Type, Codec> codecs) {
+    private static PropertyDescriptor resolve(BeanDescriptor bean, Class<?> clazz, String propName, Map<Type, Codec> codecs) {
         //look for a getter/setter pair
         Method getter = ReflectionUtil.findGetter(clazz, propName);
         Method setter = ReflectionUtil.findSetter(clazz, propName);
@@ -128,56 +142,56 @@ public class Beanz {
             return buildFieldProperty(bean, propName, field, type, propertyType);
         }
         //we have either a getter or a setter
-        MethodProperty methodProperty = buildMethodProperty(bean, propName, getter, setter, type, propertyType);
+        MethodPropertyDescriptor methodProperty = buildMethodProperty(bean, propName, getter, setter, type, propertyType);
         if (field == null) {
             //and no field
             return methodProperty; //one of them is != null;
         }
-        FieldProperty fieldProperty = buildFieldProperty(bean, propName, field, type, propertyType);
+        FieldPropertyDescriptor fieldProperty = buildFieldProperty(bean, propName, field, type, propertyType);
 
         return buildCompositeProperty(bean, propName, type, propertyType, methodProperty, fieldProperty);
     }
 
-    private static MethodProperty buildMethodProperty(BeanDescriptor bean, String propName, Method getter, Method setter, Type type, PropertyType propertyType) {
+    private static MethodPropertyDescriptor buildMethodProperty(BeanDescriptor bean, String propName, Method getter, Method setter, Type type, PropertyType propertyType) {
         switch (propertyType) {
             case SIMPLE:
-                return new SimpleMethodProperty(bean, propName, type, getter, setter);
+                return new SimpleMethodPropertyDescriptor(bean, propName, type, getter, setter);
             case ARRAY:
-                return new ArrayMethodProperty(bean, propName, type, getter, setter);
+                return new ArrayMethodPropertyDescriptor(bean, propName, type, getter, setter);
             case COLLECTION:
-                return new CollectionMethodProperty(bean, propName, type, getter, setter);
+                return new CollectionMethodPropertyDescriptor(bean, propName, type, getter, setter);
             case MAP:
-                return new MapMethodProperty(bean, propName, type, getter, setter);
+                return new MapMethodPropertyDescriptor(bean, propName, type, getter, setter);
             default:
                 throw new IllegalStateException("unhandled " + propertyType);
         }
     }
 
-    private static FieldProperty buildFieldProperty(BeanDescriptor bean, String propName, Field field, Type type, PropertyType propertyType) {
+    private static FieldPropertyDescriptor buildFieldProperty(BeanDescriptor bean, String propName, Field field, Type type, PropertyType propertyType) {
         switch (propertyType) {
             case SIMPLE:
-                return new SimpleFieldProperty(bean, propName, type, field);
+                return new SimpleFieldPropertyDescriptor(bean, propName, type, field);
             case ARRAY:
-                return new ArrayFieldProperty(bean, propName, type, field);
+                return new ArrayFieldPropertyDescriptor(bean, propName, type, field);
             case COLLECTION:
-                return new CollectionFieldProperty(bean, propName, type, field);
+                return new CollectionFieldPropertyDescriptor(bean, propName, type, field);
             case MAP:
-                return new MapFieldProperty(bean, propName, type, field);
+                return new MapFieldPropertyDescriptor(bean, propName, type, field);
             default:
                 throw new IllegalStateException("unhandled " + propertyType);
         }
     }
 
-    private static CompositeProperty buildCompositeProperty(BeanDescriptor bean, String propName, Type type, PropertyType propertyType, Property ... delegates) {
+    private static CompositePropertyDescriptor buildCompositeProperty(BeanDescriptor bean, String propName, Type type, PropertyType propertyType, PropertyDescriptor... delegates) {
         switch (propertyType) {
             case SIMPLE:
-                return new SimpleCompositeProperty(bean, propName, type, delegates);
+                return new SimpleCompositePropertyDescriptor(bean, propName, type, delegates);
             case ARRAY:
-                return new ArrayCompositeProperty(bean, propName, type, delegates);
+                return new ArrayCompositePropertyDescriptor(bean, propName, type, delegates);
             case COLLECTION:
-                return new CollectionCompositeProperty(bean, propName, type, delegates);
+                return new CollectionCompositePropertyDescriptor(bean, propName, type, delegates);
             case MAP:
-                return new MapCompositeProperty(bean, propName, type, delegates);
+                return new MapCompositePropertyDescriptor(bean, propName, type, delegates);
             default:
                 throw new IllegalStateException("unhandled " + propertyType);
         }

@@ -19,7 +19,7 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.MapProperty;
+import net.radai.beanz.api.MapPropertyDescriptor;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -27,8 +27,8 @@ import java.lang.reflect.Type;
 /**
  * Created by Radai Rosenblatt
  */
-public class MapMethodProperty extends MethodProperty implements MapProperty{
-    public MapMethodProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
+public class MapMethodPropertyDescriptor extends MethodPropertyDescriptor implements MapPropertyDescriptor {
+    public MapMethodPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Method getter, Method setter) {
         super(containingBeanDescriptor, name, type, getter, setter);
     }
 }

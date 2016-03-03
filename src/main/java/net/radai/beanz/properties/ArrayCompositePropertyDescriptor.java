@@ -18,17 +18,17 @@
 
 package net.radai.beanz.properties;
 
-import net.radai.beanz.api.ArrayProperty;
+import net.radai.beanz.api.ArrayPropertyDescriptor;
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.Property;
+import net.radai.beanz.api.PropertyDescriptor;
 
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public class ArrayCompositeProperty extends CompositeProperty implements ArrayProperty{
-    public ArrayCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
+public class ArrayCompositePropertyDescriptor extends CompositePropertyDescriptor implements ArrayPropertyDescriptor {
+    public ArrayCompositePropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, PropertyDescriptor[] delegates) {
         super(containingBeanDescriptor, name, type, delegates);
     }
 }

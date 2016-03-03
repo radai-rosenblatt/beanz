@@ -19,21 +19,35 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.Property;
-import net.radai.beanz.api.PropertyType;
+import net.radai.beanz.api.PropertyDescriptor;
 
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public class SimpleCompositeProperty extends CompositeProperty{
-    public SimpleCompositeProperty(BeanDescriptor containingBeanDescriptor, String name, Type type, Property[] delegates) {
-        super(containingBeanDescriptor, name, type, delegates);
+public abstract class PropertyDescriptorBase implements PropertyDescriptor {
+    private final BeanDescriptor containingBeanDescriptor;
+    private final String name;
+    private final Type type;
+
+    public PropertyDescriptorBase(BeanDescriptor containingBeanDescriptor, String name, Type type) {
+        this.containingBeanDescriptor = containingBeanDescriptor;
+        this.name = name;
+        this.type = type;
+    }
+
+    public BeanDescriptor getContainingBeanDescriptor() {
+        return containingBeanDescriptor;
     }
 
     @Override
-    public PropertyType getType() {
-        return PropertyType.SIMPLE;
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Type getValueType() {
+        return type;
     }
 }

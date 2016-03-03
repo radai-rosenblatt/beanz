@@ -19,7 +19,6 @@
 package net.radai.beanz.api;
 
 import net.radai.beanz.codecs.CollectionCodec;
-import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -27,36 +26,39 @@ import java.util.Collection;
 /**
  * Created by Radai Rosenblatt
  */
-public interface CollectionProperty extends Property {
+public class CollectionProperty extends Property {
 
-    @Override
-    default PropertyType getType() {
-        return PropertyType.COLLECTION;
+    public CollectionProperty(CollectionPropertyDescriptor descriptor, Bean containingBean) {
+        super(descriptor, containingBean);
     }
 
     @Override
-    default CollectionCodec getCodec() {
-        return (CollectionCodec) getContainingBeanDescriptor().getCodec(getValueType());
+    public CollectionPropertyDescriptor getDescriptor() {
+        return (CollectionPropertyDescriptor) super.getDescriptor();
     }
 
-    default Type getElementType() {
-        return ReflectionUtil.getElementType(getValueType());
+    public Type getElementType() {
+        return getDescriptor().getElementType();
     }
 
-    default void setCollection(Object bean, Collection<?> values) {
-        Class<?> collectionClass = ReflectionUtil.erase(getValueType());
-        //noinspection unchecked
-        Collection<Object> collection = (Collection<Object>) ReflectionUtil.instantiateCollection(collectionClass);
-        collection.addAll(values);
-        set(bean, collection);
+    @Override
+    public CollectionCodec getCodec() {
+        return (CollectionCodec) super.getCodec();
     }
 
-    default void setFromStrings(Object bean, Collection<String> strValues) {
-        CollectionCodec codec = getCodec();
-        if (codec == null) {
-            throw new IllegalStateException();
-        }
-        Collection<?> decoded = codec.decodeCollection(strValues);
-        set(bean, decoded);
+    public void setCollection(Collection<?> values) {
+        getDescriptor().setCollection(containingBean.getBean(), values);
+    }
+
+    public void setFromStrings(Collection<String> strValues) {
+        getDescriptor().setFromStrings(containingBean.getBean(), strValues);
+    }
+
+    public Collection<?> getCollection() {
+        return getDescriptor().getCollection(containingBean.getBean());
+    }
+
+    public Collection<String> getAsStrings() {
+        return getDescriptor().getAsStrings(containingBean.getBean());
     }
 }

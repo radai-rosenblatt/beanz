@@ -30,10 +30,10 @@ import static net.radai.beanz.util.ReflectionUtil.erase;
  * Created by Radai Rosenblatt
  */
 public class BeanDescriptor {
-    private Map<String, Property> properties = new HashMap<>();
+    private Map<String, PropertyDescriptor> properties = new HashMap<>();
     private Map<Type, Codec> codecs = new HashMap<>();
 
-    public void addProperty(Property prop) {
+    public void addProperty(PropertyDescriptor prop) {
         String name = prop != null ? prop.getName() : null;
         if (prop == null || name == null || name.isEmpty() || properties.containsKey(name)) {
             throw new IllegalArgumentException();
@@ -41,11 +41,11 @@ public class BeanDescriptor {
         properties.put(name, prop);
     }
 
-    public Property getProperty(String propName) {
+    public PropertyDescriptor getProperty(String propName) {
         return properties.get(propName);
     }
 
-    public Map<String, Property> getProperties() {
+    public Map<String, PropertyDescriptor> getProperties() {
         return properties;
     }
 

@@ -19,35 +19,21 @@
 package net.radai.beanz.properties;
 
 import net.radai.beanz.api.BeanDescriptor;
-import net.radai.beanz.api.Property;
+import net.radai.beanz.api.PropertyType;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 /**
  * Created by Radai Rosenblatt
  */
-public abstract class PropertyBase implements Property {
-    private final BeanDescriptor containingBeanDescriptor;
-    private final String name;
-    private final Type type;
-
-    public PropertyBase(BeanDescriptor containingBeanDescriptor, String name, Type type) {
-        this.containingBeanDescriptor = containingBeanDescriptor;
-        this.name = name;
-        this.type = type;
-    }
-
-    public BeanDescriptor getContainingBeanDescriptor() {
-        return containingBeanDescriptor;
+public class SimpleFieldPropertyDescriptor extends FieldPropertyDescriptor {
+    public SimpleFieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
+        super(containingBeanDescriptor, name, type, field);
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Type getValueType() {
-        return type;
+    public PropertyType getType() {
+        return PropertyType.SIMPLE;
     }
 }

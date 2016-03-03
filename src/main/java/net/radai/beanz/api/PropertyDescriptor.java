@@ -18,38 +18,37 @@
 
 package net.radai.beanz.api;
 
+import java.lang.reflect.Type;
+
 /**
  * Created by Radai Rosenblatt
  */
-public class Pod<T> {
-    private final BeanDescriptor descriptor;
-    private final T bean;
-
-    public Pod(BeanDescriptor descriptor, T bean) {
-        this.descriptor = descriptor;
-        this.bean = bean;
-    }
-
-    public Property resolve(String propName) {
-        return descriptor.getProperty(propName);
-    }
-
-    public void set(Property prop, String value) {
-        Codec codec = prop.getCodec();
+public interface PropertyDescriptor {
+    BeanDescriptor getContainingBeanDescriptor();
+    String getName();
+    PropertyType getType();
+    Type getValueType();
+    boolean isReadable();
+    boolean isWritable();
+    Object get(Object bean);
+    default String getAsString(Object bean) {
+        Codec codec = getCodec();
         if (codec == null) {
             throw new IllegalStateException();
         }
-        set(prop, codec.decode(value));
+        Object rawValue = get(bean);
+        return rawValue != null ? codec.encode(rawValue) : null;
     }
-
-    public void set(Property prop, Object value) {
-        if (resolve(prop.getName()) != prop) {
-            throw new IllegalArgumentException();
+    void set(Object bean, Object value);
+    default void setFromString(Object bean, String strValue) {
+        Codec codec = getCodec();
+        if (codec == null) {
+            throw new IllegalStateException();
         }
-        prop.set(bean, value);
+        Object value = strValue != null ? codec.decode(strValue) : null;
+        set(bean, value);
     }
-
-    public T getBean() {
-        return bean;
+    default Codec getCodec() {
+        return getContainingBeanDescriptor().getCodec(getValueType());
     }
 }

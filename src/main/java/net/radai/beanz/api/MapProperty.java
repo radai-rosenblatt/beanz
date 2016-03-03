@@ -19,41 +19,46 @@
 package net.radai.beanz.api;
 
 import net.radai.beanz.codecs.MapCodec;
-import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Map;
 
 /**
  * Created by Radai Rosenblatt
  */
-public interface MapProperty extends Property {
+public class MapProperty extends Property {
 
-    @Override
-    default PropertyType getType() {
-        return PropertyType.MAP;
+    public MapProperty(MapPropertyDescriptor descriptor, Bean containingBean) {
+        super(descriptor, containingBean);
     }
 
     @Override
-    default MapCodec getCodec() {
-        return (MapCodec) getContainingBeanDescriptor().getCodec(getValueType());
+    public MapPropertyDescriptor getDescriptor() {
+        return (MapPropertyDescriptor) super.getDescriptor();
     }
 
-    default Type getKeyType() {
-        return ReflectionUtil.getKeyType(getValueType());
+    public Type getKeyType() {
+        return getDescriptor().getKeyType();
     }
 
-    default Type getElementType() { //getValueType is taken
-        return ReflectionUtil.getElementType(getValueType());
+    public Type getElementType() {
+        return getDescriptor().getElementType();
     }
 
-    default void setFromStrings(Object bean, Map<String, String> strValues) {
-        MapCodec codec = getCodec();
-        if (codec == null) {
-            throw new IllegalStateException();
-        }
-        Map<?, ?> decoded = codec.decodeMap(strValues);
-        set(bean, decoded);
+    @Override
+    public MapCodec getCodec() {
+        return (MapCodec) super.getCodec();
+    }
+
+    public void setFromStrings(Map<String, String> strValues) {
+        getDescriptor().setFromStrings(containingBean.getBean(), strValues);
+    }
+
+    public Map<?, ?> getMap() {
+        return getDescriptor().getMap(containingBean.getBean());
+    }
+
+    public Map<String, String> getAsStrings() {
+        return getDescriptor().getAsStrings(containingBean.getBean());
     }
 }

@@ -50,4 +50,3 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     testCompile 'org.testng:testng:6.9.10'
 }
-

@@ -34,6 +34,13 @@ public abstract class FieldPropertyDescriptor extends PropertyDescriptorBase {
     public FieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
         super(containingBeanDescriptor, name, type);
         this.field = field;
+        if (!this.field.isAccessible()) {
+            try {
+                field.setAccessible(true);
+            } catch (SecurityException e) {
+                //TODO - log a warning
+            }
+        }
     }
 
     @Override
@@ -43,7 +50,7 @@ public abstract class FieldPropertyDescriptor extends PropertyDescriptorBase {
 
     @Override
     public boolean isWritable() {
-        return ReflectionUtil.isFinal(field);
+        return field.isAccessible() && !ReflectionUtil.isFinal(field);
     }
 
     @Override

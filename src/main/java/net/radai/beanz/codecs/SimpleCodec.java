@@ -49,6 +49,9 @@ public class SimpleCodec implements Codec {
 
     @Override
     public Object decode(String encoded) {
+        if (encoded == null) {
+            return null;
+        }
         try {
             return decodeMethod.invoke(null, encoded);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -58,6 +61,9 @@ public class SimpleCodec implements Codec {
 
     @Override
     public String encode(Object object) {
+        if (object == null) {
+            return null;
+        }
         try {
             if (ReflectionUtil.isStatic(encodeMethod)) {
                 return (String) encodeMethod.invoke(null, object);

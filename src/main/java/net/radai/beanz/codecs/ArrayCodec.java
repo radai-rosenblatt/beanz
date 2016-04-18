@@ -74,7 +74,7 @@ public class ArrayCodec implements Codec {
     @Override
     public String encode(Object object) {
         if (object == null) {
-            return "";
+            return null;
         }
         if (!ReflectionUtil.isArray(object.getClass())) {
             throw new IllegalArgumentException();

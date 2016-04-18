@@ -83,7 +83,7 @@ public class MapCodec implements Codec {
     @Override
     public String encode(Object object) {
         if (object == null) {
-            return "";
+            return null;
         }
         if (!ReflectionUtil.isMap(object.getClass())) {
             throw new IllegalArgumentException();

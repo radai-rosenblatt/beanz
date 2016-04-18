@@ -77,7 +77,7 @@ public class Beanz {
         if (ignore == null) {
             ignore = Collections.emptySet();
         }
-        BeanDescriptor bean = new BeanDescriptor();
+        BeanDescriptor bean = new BeanDescriptor(clazz);
 
         Map<String, PropertyDescriptor> properties = new HashMap<>();
         Map<Type, Codec> codecs = new HashMap<>(Codecs.BUILT_INS);

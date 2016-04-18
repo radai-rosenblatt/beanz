@@ -72,4 +72,9 @@ public class Bean<T> {
     public Property getProperty(String propName) {
         return properties.get(propName);
     }
+
+    @Override
+    public String toString() {
+        return descriptor + "@" + Integer.toHexString(System.identityHashCode(bean));
+    }
 }

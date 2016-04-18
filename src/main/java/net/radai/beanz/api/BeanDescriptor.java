@@ -30,8 +30,15 @@ import static net.radai.beanz.util.ReflectionUtil.erase;
  * Created by Radai Rosenblatt
  */
 public class BeanDescriptor {
-    private Map<String, PropertyDescriptor> properties = new HashMap<>();
-    private Map<Type, Codec> codecs = new HashMap<>();
+    private final Class<?> beanClass;
+    private final Map<String, PropertyDescriptor> properties;
+    private final Map<Type, Codec> codecs;
+
+    public BeanDescriptor(Class<?> beanClass) {
+        this.beanClass = beanClass;
+        this.properties = new HashMap<>();
+        this.codecs = new HashMap<>();
+    }
 
     public void addProperty(PropertyDescriptor prop) {
         String name = prop != null ? prop.getName() : null;
@@ -58,5 +65,10 @@ public class BeanDescriptor {
 
     public Codec getCodec(Type type) {
         return codecs.get(type);
+    }
+
+    @Override
+    public String toString() {
+        return beanClass.getSimpleName();
     }
 }

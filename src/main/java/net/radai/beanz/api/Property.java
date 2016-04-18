@@ -83,4 +83,9 @@ public class Property {
     public String getAsString() {
         return descriptor.getAsString(containingBean.getBean());
     }
+
+    @Override
+    public String toString() {
+        return containingBean + "." + descriptor.getName();
+    }
 }

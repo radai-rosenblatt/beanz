@@ -98,6 +98,10 @@ public class ReflectionUtil {
         return new HashMap<>();
     }
 
+    public static boolean isPrimitive(Type type) {
+        return erase(type).isPrimitive();
+    }
+
     public static boolean isArray(Type type) {
         if (type instanceof ParameterizedType) {
             return false;

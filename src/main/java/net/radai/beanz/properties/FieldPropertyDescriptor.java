@@ -21,6 +21,7 @@ package net.radai.beanz.properties;
 import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.util.ReflectionUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -33,6 +34,9 @@ public abstract class FieldPropertyDescriptor extends PropertyDescriptorBase {
 
     public FieldPropertyDescriptor(BeanDescriptor containingBeanDescriptor, String name, Type type, Field field) {
         super(containingBeanDescriptor, name, type);
+        if (field == null) {
+            throw new IllegalArgumentException();
+        }
         this.field = field;
         if (!this.field.isAccessible()) {
             try {
@@ -74,6 +78,11 @@ public abstract class FieldPropertyDescriptor extends PropertyDescriptorBase {
             //todo - support using private fields
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        return field.getAnnotationsByType(annotationClass);
     }
 
     @Override

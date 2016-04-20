@@ -18,6 +18,7 @@
 
 package net.radai.beanz.api;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
@@ -51,4 +52,5 @@ public interface PropertyDescriptor {
     default Codec getCodec() {
         return getContainingBeanDescriptor().getCodec(getValueType());
     }
+    <A extends Annotation> A[] getAnnotations(Class<A> annotationClass);
 }

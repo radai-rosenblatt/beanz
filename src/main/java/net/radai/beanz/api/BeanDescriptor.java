@@ -20,6 +20,7 @@ package net.radai.beanz.api;
 
 import org.apache.commons.lang3.ClassUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,10 @@ public class BeanDescriptor {
 
     public Codec getCodec(Type type) {
         return codecs.get(type);
+    }
+
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        return beanClass.getAnnotationsByType(annotationClass);
     }
 
     @Override

@@ -21,6 +21,7 @@ package net.radai.beanz.properties;
 import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.util.ReflectionUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -75,6 +76,14 @@ public abstract class MethodPropertyDescriptor extends PropertyDescriptorBase {
             //todo - support using private methods
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        if (getter == null) {
+            return null;
+        }
+        return getter.getAnnotationsByType(annotationClass);
     }
 
     @Override

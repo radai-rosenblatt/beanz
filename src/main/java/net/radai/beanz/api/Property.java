@@ -18,6 +18,7 @@
 
 package net.radai.beanz.api;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
@@ -82,6 +83,21 @@ public class Property {
 
     public String getAsString() {
         return descriptor.getAsString(containingBean.getBean());
+    }
+
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        return descriptor.getAnnotations(annotationClass);
+    }
+
+    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+        A[] annotations = getAnnotations(annotationClass);
+        if (annotations == null || annotations.length == 0) {
+            return null;
+        }
+        if (annotations.length > 1) {
+            throw new IllegalStateException("found " + annotations.length + " annotations of type " + annotationClass + ", but only one requested");
+        }
+        return annotations[0];
     }
 
     @Override

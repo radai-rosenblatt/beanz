@@ -18,6 +18,7 @@
 
 package net.radai.beanz.api;
 
+import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,21 @@ public class Bean<T> {
 
     public Property getProperty(String propName) {
         return properties.get(propName);
+    }
+
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        return descriptor.getAnnotations(annotationClass);
+    }
+
+    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+        A[] annotations = getAnnotations(annotationClass);
+        if (annotations == null || annotations.length == 0) {
+            return null;
+        }
+        if (annotations.length > 1) {
+            throw new IllegalStateException("found " + annotations.length + " annotations of type " + annotationClass + ", but only one requested");
+        }
+        return annotations[0];
     }
 
     @Override

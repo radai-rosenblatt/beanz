@@ -21,6 +21,7 @@ package net.radai.beanz.properties;
 import net.radai.beanz.api.BeanDescriptor;
 import net.radai.beanz.api.PropertyDescriptor;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
@@ -81,5 +82,16 @@ public abstract class CompositePropertyDescriptor extends PropertyDescriptorBase
             }
         }
         throw new IllegalStateException(); //not writable
+    }
+
+    @Override
+    public <A extends Annotation> A[] getAnnotations(Class<A> annotationClass) {
+        A[] results = null;
+        for (PropertyDescriptor delegate : delegates) {
+            if ((results = delegate.getAnnotations(annotationClass)) != null) {
+                break;
+            }
+        }
+        return results;
     }
 }

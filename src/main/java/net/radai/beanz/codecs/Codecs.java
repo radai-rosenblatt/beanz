@@ -22,8 +22,9 @@ import net.radai.beanz.api.Codec;
 import net.radai.beanz.util.ReflectionUtil;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Radai Rosenblatt
@@ -74,6 +75,53 @@ public class Codecs {
         @Override
         public String toString() {
             return "Character codec : special sauce";
+        }
+    };
+
+    public static final Codec DATE_CODEC = new Codec() {
+        private final SimpleDateFormat timestamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS Z");
+        private final SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+
+        {
+            timestamp.setTimeZone(TimeZone.getTimeZone("GMT"));
+            date.setTimeZone(TimeZone.getTimeZone("GMT"));
+        }
+
+        @Override
+        public Type getType() {
+            return Date.class;
+        }
+
+        @Override
+        public Object decode(String encoded) {
+            if (encoded == null || encoded.isEmpty()) {
+                return null;
+            }
+            try {
+                return timestamp.parse(encoded);
+            } catch (ParseException e) {
+                try {
+                    return date.parse(encoded);
+                } catch (ParseException e2) {
+                    throw new IllegalArgumentException(e2);
+                }
+            }
+        }
+
+        @Override
+        public String encode(Object object) {
+            if (object == null) {
+                return null;
+            }
+            Date date = (Date) object;
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            calendar.setTime(date);
+            if (calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0
+                && calendar.get(Calendar.SECOND) == 0 && calendar.get(Calendar.MILLISECOND) == 0) {
+                return this.date.format(date);
+            } else {
+                return timestamp.format(date);
+            }
         }
     };
 
@@ -137,6 +185,7 @@ public class Codecs {
         BUILT_INS.put(Float.class,     safe(BUILT_INS.get(float.class)));
         BUILT_INS.put(Double.class,    safe(BUILT_INS.get(double.class)));
         BUILT_INS.put(String.class,    NOP_CODEC);
+        BUILT_INS.put(Date.class,      DATE_CODEC);
     }
 
     private static SimpleCodec codecFor(Class<?> clazz) {

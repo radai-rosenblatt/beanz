@@ -26,9 +26,9 @@ import java.lang.reflect.Type;
  */
 public class Property {
     protected final PropertyDescriptor descriptor;
-    protected final Bean containingBean;
+    protected final Bean<?> containingBean;
 
-    public Property(PropertyDescriptor descriptor, Bean containingBean) {
+    public Property(PropertyDescriptor descriptor, Bean<?> containingBean) {
         if (descriptor == null || containingBean == null
                 || containingBean.getDescriptor().getProperty(descriptor.getName()) != descriptor) {
             throw new IllegalArgumentException();
@@ -41,7 +41,7 @@ public class Property {
         return descriptor;
     }
 
-    public Bean getContainingBean() {
+    public Bean<?> getContainingBean() {
         return containingBean;
     }
 

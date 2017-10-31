@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class MapProperty extends Property {
 
-    public MapProperty(MapPropertyDescriptor descriptor, Bean containingBean) {
+    public MapProperty(MapPropertyDescriptor descriptor, Bean<?> containingBean) {
         super(descriptor, containingBean);
     }
 

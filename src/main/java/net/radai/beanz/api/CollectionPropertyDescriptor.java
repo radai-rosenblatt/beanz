@@ -50,7 +50,7 @@ public interface CollectionPropertyDescriptor extends PropertyDescriptor {
             return;
         }
         Class<?> collectionClass = ReflectionUtil.erase(getValueType());
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         Collection<Object> collection = (Collection<Object>) ReflectionUtil.instantiateCollection(collectionClass);
         collection.addAll(values);
         set(bean, collection);

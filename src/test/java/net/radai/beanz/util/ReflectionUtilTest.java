@@ -18,11 +18,12 @@
 
 package net.radai.beanz.util;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import java.lang.reflect.Type;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Created by Radai Rosenblatt
@@ -34,7 +35,7 @@ public class ReflectionUtilTest {
     @Test
     public void testErase() throws Exception {
         Type mapType = getClass().getDeclaredField("map").getGenericType();
-        Assert.assertNotEquals(Map.class, mapType);
-        Assert.assertEquals(Map.class, ReflectionUtil.erase(mapType));
+        Assertions.assertNotEquals(Map.class, mapType);
+        Assertions.assertEquals(Map.class, ReflectionUtil.erase(mapType));
     }
 }

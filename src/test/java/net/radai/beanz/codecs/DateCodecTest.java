@@ -19,13 +19,14 @@
 package net.radai.beanz.codecs;
 
 import net.radai.beanz.api.Codec;
-import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Created by Radai Rosenblatt
@@ -35,7 +36,7 @@ public class DateCodecTest {
     private SimpleDateFormat shortFormat;
     private Codec codec;
 
-    @BeforeTest
+    @BeforeEach
     public void before() {
         fullFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS Z");
         fullFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -49,7 +50,7 @@ public class DateCodecTest {
         Date date = shortFormat.parse("01/02/1956");
         String encoded = codec.encode(date);
         Object decoded = codec.decode(encoded);
-        Assert.assertEquals(date, decoded);
+        Assertions.assertEquals(date, decoded);
     }
 
     @Test
@@ -57,13 +58,13 @@ public class DateCodecTest {
         Date date = fullFormat.parse("01/02/1956 01:02:03.456 +0800");
         String encoded = codec.encode(date);
         Object decoded = codec.decode(encoded);
-        Assert.assertEquals(date, decoded);
+        Assertions.assertEquals(date, decoded);
     }
 
     @Test
     public void testNulls() throws Exception {
-        Assert.assertNull(codec.encode(null));
-        Assert.assertNull(codec.decode(null));
-        Assert.assertNull(codec.decode(""));
+        Assertions.assertNull(codec.encode(null));
+        Assertions.assertNull(codec.decode(null));
+        Assertions.assertNull(codec.decode(""));
     }
 }

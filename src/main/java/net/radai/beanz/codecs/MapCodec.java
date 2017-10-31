@@ -21,7 +21,6 @@ package net.radai.beanz.codecs;
 import net.radai.beanz.api.Codec;
 import net.radai.beanz.util.ReflectionUtil;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.text.StrBuilder;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -68,7 +67,7 @@ public class MapCodec implements Codec {
             throw new IllegalArgumentException();
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         Map<Object, Object> map = (Map<Object, Object>) ReflectionUtil.instantiateMap(erase(type));
         for (String element : elements) {
             String[] kvPair = element.split("\\s*=\\s*");
@@ -92,7 +91,7 @@ public class MapCodec implements Codec {
         if (map.isEmpty()) {
             return "{}";
         }
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("{");
         for (Map.Entry<?, ?> entry  : map.entrySet()) {
             sb.append(keyCodec.encode(entry.getKey())).append("=").append(valueCodec.encode(entry.getValue())).append(", ");
@@ -103,7 +102,7 @@ public class MapCodec implements Codec {
     }
 
     public Map<?, ?> decodeMap(Map<String, String> strMap) {
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         Map<Object, Object> result = (Map<Object, Object>) ReflectionUtil.instantiateMap(erase(getType()));
         for (Map.Entry<String, String> pair : strMap.entrySet()) {
             String keyStr = pair.getKey();

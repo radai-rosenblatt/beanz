@@ -28,7 +28,7 @@ import java.util.Collection;
  */
 public class CollectionProperty extends Property {
 
-    public CollectionProperty(CollectionPropertyDescriptor descriptor, Bean containingBean) {
+    public CollectionProperty(CollectionPropertyDescriptor descriptor, Bean<?> containingBean) {
         super(descriptor, containingBean);
     }
 

@@ -15,31 +15,44 @@
  * You should have received a copy of the GNU General Public License
  * along with Beanz.  If not, see <http://www.gnu.org/licenses/>.
  */
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
+    }
+}
 
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
-group = "com.github.radai-rosenblatt"
-version = "0.1-SNAPSHOT"
+group = "net.radai"
 
 repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url "https://jitpack.io" }
+    jcenter()
 }
 
 compileJava {
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:all"
 }
 
-test {
-    useTestNG()
+compileTestJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:all"
 }
 
-task sourceJar(type: Jar) {
+task sourceJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allJava
     classifier = 'sources'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.3'
+    distributionType = 'ALL'
 }
 
 artifacts {
@@ -47,6 +60,10 @@ artifacts {
 }
 
 dependencies {
-    compile 'org.apache.commons:commons-lang3:3.4'
-    testCompile 'org.testng:testng:6.9.10'
+    compile 'org.apache.commons:commons-lang3:3.6'
+
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.0.1')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.0.1')
+    // To avoid compiler warnings about @API annotations in JUnit code
+    testCompileOnly('org.apiguardian:apiguardian-api:1.0.0')
 }

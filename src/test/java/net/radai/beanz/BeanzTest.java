@@ -19,11 +19,13 @@
 package net.radai.beanz;
 
 import net.radai.beanz.api.Bean;
-import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * Created by Radai Rosenblatt
@@ -33,11 +35,11 @@ public class BeanzTest {
     @Test
     public void testSimpleBeanWrapping() {
         BeanClass instance = new BeanClass();
-        Bean bean = Beanz.wrap(instance);
-        int g = 7;
+        Bean<BeanClass> bean = Beanz.wrap(instance);
+        Assertions.assertNotNull(bean);
     }
 
-    public static enum Enum1 {
+    public enum Enum1 {
         V1, V2;
     }
 

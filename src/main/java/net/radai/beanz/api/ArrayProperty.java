@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class ArrayProperty extends Property {
 
-    public ArrayProperty(ArrayPropertyDescriptor descriptor, Bean containingBean) {
+    public ArrayProperty(ArrayPropertyDescriptor descriptor, Bean<?> containingBean) {
         super(descriptor, containingBean);
     }
 

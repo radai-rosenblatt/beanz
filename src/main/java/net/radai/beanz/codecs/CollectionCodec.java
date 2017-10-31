@@ -21,7 +21,6 @@ package net.radai.beanz.codecs;
 import net.radai.beanz.api.Codec;
 import net.radai.beanz.util.ReflectionUtil;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.text.StrBuilder;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -61,7 +60,7 @@ public class CollectionCodec implements Codec {
             throw new IllegalArgumentException("unable to parse a collection out of " + encoded);
         }
         String[] elements = encoded.substring(1, encoded.length()-1).split("\\s*,\\s*");
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         Collection<Object> collection = (Collection<Object>) ReflectionUtil.instantiateCollection(ReflectionUtil.erase(type));
         for (String element : elements) {
             //noinspection unchecked
@@ -82,7 +81,7 @@ public class CollectionCodec implements Codec {
         if (collection.isEmpty()) {
             return "[]";
         }
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (Object element : collection) {
             sb.append(elementCodec.encode(element)).append(", ");
@@ -93,7 +92,7 @@ public class CollectionCodec implements Codec {
     }
 
     public Collection<?> decodeCollection(Collection<String> strCollection) {
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         Collection<Object> result = (Collection<Object>) ReflectionUtil.instantiateCollection(erase(getType()));
         for (String strValue : strCollection) {
             Object value = elementCodec.decode(strValue);

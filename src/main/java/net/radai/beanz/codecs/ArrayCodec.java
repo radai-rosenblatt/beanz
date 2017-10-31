@@ -21,7 +21,6 @@ package net.radai.beanz.codecs;
 import net.radai.beanz.api.Codec;
 import net.radai.beanz.util.ReflectionUtil;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.text.StrBuilder;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
@@ -83,7 +82,7 @@ public class ArrayCodec implements Codec {
         if (size == 0) {
             return "[]";
         }
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i=0; i<size; i++) {
             Object element = Array.get(object, i);

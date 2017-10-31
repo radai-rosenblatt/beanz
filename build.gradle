@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright 2017 Radai Rosenblat
  * All rights reserved.
  *
@@ -36,6 +36,7 @@ plugins {
 }
 
 apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = "net.radai"
@@ -79,13 +80,26 @@ dependencies {
     testCompileOnly('org.apiguardian:apiguardian-api:1.0.0')
 }
 
+publishing {
+    publications {
+        beanz(MavenPublication) {
+            from components.java
+            artifact sourceJar
+        }
+    }
+}
+
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
+    publications = ['beanz']
     pkg {
         repo = 'beanz'
         name = 'beanz'
         licenses = ['BSD 2-Clause']
         vcsUrl = 'https://github.com/radai-rosenblatt/beanz.git'
+        version {
+            name = project.version
+        }
     }
 }

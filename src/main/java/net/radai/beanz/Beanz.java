@@ -41,6 +41,7 @@ public class Beanz {
 
     /**
      * wraps around an existing bean instance
+     * @param <T> type of bean
      * @param instance existing bean instance
      * @return a Bean wrapper around the given instance
      */
@@ -55,6 +56,7 @@ public class Beanz {
     /**
      * creates a new Bean wrapper around a newly-created instance of
      * the given class
+     * @param <T> class to create and wrap an instance of
      * @param clazz class to create and wrap an instance of
      * @return a bean wrapper around an instance of the given class
      */

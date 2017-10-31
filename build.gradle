@@ -100,9 +100,10 @@ bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
     publications = ['beanz']
+    publish = true
     pkg {
         repo = 'beanz'
-        name = 'beanz'
+        name = rootProject.name
         licenses = ['BSD 2-Clause']
         vcsUrl = 'https://github.com/radai-rosenblatt/beanz.git'
         version {

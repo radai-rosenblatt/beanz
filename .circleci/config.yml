@@ -1,30 +1,104 @@
 version: 2
 
 jobs:
-   build:
-     docker:
-       - image: circleci/openjdk:9
-     steps:
-       - checkout
-       - restore_cache:
-           key: dependency-cache-{{ checksum "build.gradle" }}
-       - run:
-           command: ./gradlew clean build
-       - run:
-           command: ./gradlew sonarqube -Dsonar.organization=radai-rosenblatt-github -Dsonar.login=$SONAR_KEY
-       - run:
-           command: ./gradlew bintrayUpload -Prelease
-       - save_cache:
-           key: dependency-cache-{{ checksum "build.gradle" }}
-           paths:
-             - ~/.gradle
-       - run:
-           command: mkdir ~/test-results
-       - run:
-           command: find ~ -type f -regex ".*/test-results/.*xml" -exec ln {} ~/test-results/ \;
-       - store_test_results:
-           path: ~/test-results
-       - store_artifacts:
-           path: ~/test-results
-       - store_artifacts:
-           path: build/libs
+
+  buildPR:
+    docker:
+      - image: circleci/openjdk:9
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+      - run:
+          command: ./gradlew clean build
+      - save_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+          paths:
+            - ~/.gradle
+      - run:
+          command: mkdir ~/test-results
+      - run:
+          command: find ~ -type f -regex ".*/test-results/.*xml" -exec ln {} ~/test-results/ \;
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results
+      - store_artifacts:
+          path: build/libs
+
+  buildSnapshot:
+    docker:
+      - image: circleci/openjdk:9
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+      - run:
+          command: ./gradlew clean build
+      - run:
+          command: ./gradlew sonarqube -Dsonar.organization=radai-rosenblatt-github -Dsonar.login=$SONAR_KEY
+      - save_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+          paths:
+            - ~/.gradle
+      - run:
+          command: mkdir ~/test-results
+      - run:
+          command: find ~ -type f -regex ".*/test-results/.*xml" -exec ln {} ~/test-results/ \;
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results
+      - store_artifacts:
+          path: build/libs
+
+  buildRelease:
+    docker:
+      - image: circleci/openjdk:9
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+      - run:
+          command: ./gradlew clean build
+      - run:
+          command: ./gradlew sonarqube -Dsonar.organization=radai-rosenblatt-github -Dsonar.login=$SONAR_KEY
+      - run:
+          command: ./gradlew bintrayUpload -Prelease
+      - save_cache:
+          key: dependency-cache-{{ checksum "build.gradle" }}
+          paths:
+            - ~/.gradle
+      - run:
+          command: mkdir ~/test-results
+      - run:
+          command: find ~ -type f -regex ".*/test-results/.*xml" -exec ln {} ~/test-results/ \;
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results
+      - store_artifacts:
+          path: build/libs
+
+workflows:
+  version: 2
+
+  regular_build:
+    jobs:
+      - buildSnapshot:
+          filter:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
+
+  release_build:
+    jobs:
+      - buildRelease:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^[0-9]+\.[0-9]+\.[0-9]+$/
+
+

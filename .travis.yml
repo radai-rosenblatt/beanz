@@ -2,3 +2,6 @@ language: java
 
 jdk:
   - oraclejdk9
+
+script:
+  - ./gradlew build

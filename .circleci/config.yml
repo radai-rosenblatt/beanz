@@ -86,7 +86,7 @@ workflows:
   regular_build:
     jobs:
       - buildSnapshot:
-          filter:
+          filters:
             branches:
               only: /.*/
             tags:

@@ -11,6 +11,8 @@ jobs:
        - run:
            command: ./gradlew clean build
        - run:
+           command: ./gradlew sonarqube -Dsonar.organization=radai-rosenblatt-github -Dsonar.login=$SONAR_KEY
+       - run:
            command: ./gradlew bintrayUpload -Prelease
        - save_cache:
            key: dependency-cache-{{ checksum "build.gradle" }}

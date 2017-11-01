@@ -28,8 +28,9 @@ package net.radai.beanz.util;
 
 import java.lang.reflect.Type;
 import java.util.Map;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 public class ReflectionUtilTest {
     @SuppressWarnings("unused") //it is, via reflection
@@ -38,7 +39,7 @@ public class ReflectionUtilTest {
     @Test
     public void testErase() throws Exception {
         Type mapType = getClass().getDeclaredField("map").getGenericType();
-        Assertions.assertNotEquals(Map.class, mapType);
-        Assertions.assertEquals(Map.class, ReflectionUtil.erase(mapType));
+        Assert.assertNotEquals(Map.class, mapType);
+        Assert.assertEquals(Map.class, ReflectionUtil.erase(mapType));
     }
 }

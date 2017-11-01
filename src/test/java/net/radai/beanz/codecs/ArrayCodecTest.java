@@ -29,8 +29,9 @@ package net.radai.beanz.codecs;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
+
 
 public class ArrayCodecTest {
     @SuppressWarnings("unused") //used via reflection
@@ -42,8 +43,8 @@ public class ArrayCodecTest {
         ArrayCodec codec = new ArrayCodec(arrayType, int.class, Codecs.BUILT_INS.get(int.class));
         List<String> strings = Arrays.asList("1", "2", "3");
         int[] decoded = (int[]) codec.decodeArray(strings);
-        Assertions.assertArrayEquals(new int[] {1, 2, 3}, decoded);
+        Assert.assertArrayEquals(new int[] {1, 2, 3}, decoded);
         decoded = (int[]) codec.decode("[1, 2, 3]");
-        Assertions.assertArrayEquals(new int[] {1, 2, 3}, decoded);
+        Assert.assertArrayEquals(new int[] {1, 2, 3}, decoded);
     }
 }

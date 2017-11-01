@@ -30,8 +30,8 @@ import net.radai.beanz.api.Bean;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class BeanzTest {
 
@@ -39,7 +39,7 @@ public class BeanzTest {
     public void testSimpleBeanWrapping() {
         BeanClass instance = new BeanClass();
         Bean<BeanClass> bean = Beanz.wrap(instance);
-        Assertions.assertNotNull(bean);
+        Assert.assertNotNull(bean);
     }
 
     public enum Enum1 {

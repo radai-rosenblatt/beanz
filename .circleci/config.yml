@@ -2,31 +2,7 @@ version: 2
 
 jobs:
 
-  buildPR:
-    docker:
-      - image: circleci/openjdk:9
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "build.gradle" }}
-      - run:
-          command: ./gradlew clean build
-      - save_cache:
-          key: dependency-cache-{{ checksum "build.gradle" }}
-          paths:
-            - ~/.gradle
-      - run:
-          command: mkdir ~/test-results
-      - run:
-          command: find ~ -type f -regex ".*/test-results/.*xml" -exec ln {} ~/test-results/ \;
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results
-      - store_artifacts:
-          path: build/libs
-
-  buildSnapshot:
+  buildSnapshotOrPR:
     docker:
       - image: circleci/openjdk:9
     steps:
@@ -36,7 +12,9 @@ jobs:
       - run:
           command: ./gradlew clean build
       - run:
-          command: ./gradlew sonarqube -Dsonar.organization=radai-rosenblatt-github -Dsonar.login=$SONAR_KEY
+          command: ./.circleci/runCodeAnalysis.sh
+      - run:
+          command: ./.circleci/publishSnapshot.sh
       - save_cache:
           key: dependency-cache-{{ checksum "build.gradle" }}
           paths:
@@ -85,7 +63,7 @@ workflows:
 
   regular_build:
     jobs:
-      - buildSnapshot:
+      - buildSnapshotOrPR:
           filters:
             branches:
               only: /.*/

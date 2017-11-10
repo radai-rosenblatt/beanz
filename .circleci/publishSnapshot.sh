@@ -2,12 +2,9 @@
 
 set -e
 
-echo "CIRCLE_PULL_REQUESTS is $CIRCLE_PULL_REQUESTS"
-echo "CIRCLE_PR_NUMBER is $CIRCLE_PR_NUMBER"
-
 if [ "x$CIRCLE_PULL_REQUESTS" != "x" ]; then
-  echo "this is a PR build"
+  echo "this is a PR build - not reporting publishing a snapshot"
   exit 0
 fi
 
-echo "this is a commit build"
+echo "TBD - snapshot builds"

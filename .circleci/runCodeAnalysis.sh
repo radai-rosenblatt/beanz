@@ -4,6 +4,7 @@ set -e
 
 echo "CIRCLE_PULL_REQUESTS is $CIRCLE_PULL_REQUESTS"
 echo "CIRCLE_PR_NUMBER is $CIRCLE_PR_NUMBER"
+env
 
 if [ "x$CIRCLE_PULL_REQUESTS" != "x" ]; then
   echo "this is a PR build"
